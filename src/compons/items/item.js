@@ -36,8 +36,6 @@ newItem(card) {
   const idMove = card.id;
   const voteMove = card.vote_average;
 
-  console.log(card)
-
   return (
     <Col md={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 454, height: 281 }}>
       <Card style={{ width: 454, height: 281 }}>
