@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate} from 'antd';
 
@@ -16,13 +15,10 @@ static defaultProps = {
 };
 
 static propTypes = {
-  search: PropTypes.string
 }
 
 componentDidMount() {
-  const {search} =  this.props;
-  console.log(search);
-  this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${'girl111111'}`)
+  this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${'girls'}`)
   .then(array => this.setState({
     cards: array.results,
     loading: false
@@ -50,7 +46,6 @@ onErrorOffInternet() {
 
 getResourse = async (url) => {
   const res = await fetch(url);
-  console.log(window.navigator.onLine)
   // if(!window.navigator.onLine) {
   //   return this.onError()
   // }
@@ -113,7 +108,6 @@ newItem(card) {
 
   render() {
     const {cards, loading, error} = this.state;
-    console.log(error)
 
     if(loading) return this.spinLoading();
     if(error) return <Alert type="error" message="ошибка в запросе и все" banner />;

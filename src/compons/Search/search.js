@@ -6,8 +6,8 @@ export default class Search extends Component {
 
     
 
-    onSearch(event) {
-        console.log(event.target.value)
+    onSearch() {
+        
     }
 
 render() {
