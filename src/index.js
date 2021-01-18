@@ -1,31 +1,40 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Row, Col, Input, Tabs } from 'antd';
+import { Row, Col, Input, Spin, Alert, Tabs } from 'antd';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import Items from './compons/items/item';
+import Search from './compons/Search/search'
 
 const { TabPane } = Tabs;
 
+function search() {
+  return "Harry"
+};
 
 const App = () => (
-  <div>
-    <Row gutter={[25, 25]}>
-      <Col md={{ span: 1 }} lg={{ span: 3 }} />
+
+    <div>
+    <Row justify="center">
       <Col md={{ span: 22 }} lg={{ span: 18 }}>
         <Tabs defaultActiveKey="1" centered onTabScroll='top'>
           <TabPane tab="Search" key="1">
-            <Input placeholder="Type to search..."  style={{ marginBottom: 30 }} onChange={() => console.log()} allowClear='true'/>
-            <Items /> 
+            <Search/>
+            <Items value={search}/> 
           </TabPane>
           <TabPane tab="Rated" key="2">
             <Input placeholder="Type to search..." style={{ marginBottom: 30 }}/>
-         
+            <Spin size="large" tip="В разработке...">
+              <Alert
+                message="Пока не знаю, что здесь должно быть"
+                description="Further details about the context of this alert."
+                type="info"/>
+          </Spin>,
           </TabPane>
         </Tabs>
       </Col>
-      <Col md={{ span: 1 }} lg={{ span: 3 }} />
     </Row>
   </div>
+  
 )
 
 render(<App/>, document.getElementById('root'));

@@ -1,23 +1,72 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import { Row, Card, Image, Col, Typography, Rate} from 'antd';
-
+import { Row, Card, Image, Col, Spin, Alert, Typography, Rate} from 'antd';
 
 export default class Items extends Component {
 
 state = {
   cards: [],
+  loading: true,
+  error: false
 };
 
+static defaultProps = {
+  search: 'harry'
+};
+
+static propTypes = {
+  search: PropTypes.string
+}
+
 componentDidMount() {
-  fetch(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${'return'}`)
-  .then(response => response.json())
-  .then(array => this.setState({cards: array.results}))
+  const {search} =  this.props;
+  console.log(search);
+  this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${'girl111111'}`)
+  .then(array => this.setState({
+    cards: array.results,
+    loading: false
+  }))
   .catch(this.onError);
 }
 
 onError = () => {
+  this.setState({
+    loading: false,
+    error: true
+  });
+}
 
+onErrorOffInternet() {
+  return (
+    <Alert
+      message="Ошибка"
+      description="Не поладки с интернетом"
+      type="попробуйте перезагрузить страничку"
+      showIcon
+    />
+  )
+}
+
+getResourse = async (url) => {
+  const res = await fetch(url);
+  console.log(window.navigator.onLine)
+  // if(!window.navigator.onLine) {
+  //   return this.onError()
+  // }
+  const body = await res.json();
+  return body
+}
+
+spinLoading() {
+  return (
+    <Spin tip="Loading..." size="large">
+      <Alert
+        message="one secons please"
+        description="Further details about the context of this alert."
+        type="info"
+      />
+    </Spin>)
 }
 
 shortText(longText, maxLength) {
@@ -31,14 +80,14 @@ newItem(card) {
   const { Text } = Typography;
   const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
   const nameMove = card.original_title;
-  const dataMove = format(new Date(card.release_date), "PP");
+  const dataMove = card.release_date ? format(new Date(card.release_date), "PP") : null;
   const overviewMove = card.overview;
   const idMove = card.id;
   const voteMove = card.vote_average;
 
   return (
-    <Col md={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 454, height: 281 }}>
-      <Card style={{ width: 454, height: 281 }}>
+    <Col sm={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 430, height: 281 }}>
+      <Card style={{ width: 430, height: 281 }}>
         <Row >
           <Col span={12}>
             <Image
@@ -47,7 +96,7 @@ newItem(card) {
               src={imgMove}/>
           </Col>
           <Col span={12}>
-            <Row gutter={[8]}>
+            <Row >
               <Col span={20}><Text strong>{nameMove}</Text></Col>
               <Col span={3}><Text type="warning">{voteMove} </Text></Col>
             </Row>
@@ -63,9 +112,16 @@ newItem(card) {
 }
 
   render() {
-    const {cards} = this.state;
+    const {cards, loading, error} = this.state;
+    console.log(error)
+
+    if(loading) return this.spinLoading();
+    if(error) return <Alert type="error" message="ошибка в запросе и все" banner />;
+
+    if (!navigator.onLine) return this.onErrorOffInternet()
+    if(cards.length === 0) return <Alert type="error" message="по вашему запросу не найдено фильмов" banner />;
     return (
-      <Row gutter={[25, 25]} justify='center'> 
+      <Row gutter={{xs: 8, sm: 16, md: 24}} justify="center"> 
         {cards.map(card => (this.newItem(card)))}
       </Row>
     )
