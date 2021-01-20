@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate} from 'antd';
 
@@ -10,20 +11,27 @@ state = {
   error: false
 };
 
-static defaultProps = {
-  search: 'harry'
-};
+ componentDidMount() {
+  const { pageProps, searchData } = this.props;
 
-static propTypes = {
-}
-
-componentDidMount() {
-  this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${'girls'}`)
+  this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${searchData}&page=${pageProps}`)
   .then(array => this.setState({
     cards: array.results,
     loading: false
   }))
   .catch(this.onError);
+}
+
+componentDidUpdate(prevProps) {
+  const { pageProps, searchData } = this.props;
+  if(pageProps !== prevProps.pageProps || searchData !== prevProps.searchData) {
+    this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${searchData}&page=${pageProps}`)
+  .then(array => this.setState({
+    cards: array.results,
+    loading: false
+  }))
+  .catch(this.onError);
+  }
 }
 
 onError = () => {
@@ -46,9 +54,6 @@ onErrorOffInternet() {
 
 getResourse = async (url) => {
   const res = await fetch(url);
-  // if(!window.navigator.onLine) {
-  //   return this.onError()
-  // }
   const body = await res.json();
   return body
 }
@@ -112,12 +117,23 @@ newItem(card) {
     if(loading) return this.spinLoading();
     if(error) return <Alert type="error" message="ошибка в запросе и все" banner />;
 
-    if (!navigator.onLine) return this.onErrorOffInternet()
+    if (!navigator.onLine) return this.onErrorOffInternet();
     if(cards.length === 0) return <Alert type="error" message="по вашему запросу не найдено фильмов" banner />;
+
     return (
       <Row gutter={{xs: 8, sm: 16, md: 24}} justify="center"> 
         {cards.map(card => (this.newItem(card)))}
       </Row>
     )
   }
+}
+
+Items.defaultProps = {
+  pageProps: 1,
+  searchData: ''
+}
+
+Items.propTypes = {
+  pageProps: PropTypes.number,
+  searchData: PropTypes.string
 }
