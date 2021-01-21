@@ -42,7 +42,6 @@ componentDidUpdate(prevProps) {
 componentWillUnmount() {
   
   const { searchData, pageProps } = this.props;
-  console.log(!searchData)
   if(!searchData) {
     this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${' '}&page=${pageProps}`)
   .then(array => this.setState({
