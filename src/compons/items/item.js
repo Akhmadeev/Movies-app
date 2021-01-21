@@ -27,11 +27,11 @@ componentDidUpdate(prevProps) {
   if(pageProps !== prevProps.pageProps || searchData !== prevProps.searchData) {
     if(searchData) {
       this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${searchData}&page=${pageProps}`)
-  .then(array => this.setState({
-    cards: array.results,
-    loading: false
-  }))
-  .catch(this.onError);
+        .then(array => this.setState({
+          cards: array.results,
+          loading: false
+        }))
+        .catch(this.onError);
     }
     if(searchData === null) {
       <Alert type="error" message="Выберите фильм" banner />
@@ -39,19 +39,7 @@ componentDidUpdate(prevProps) {
   }
 }
 
-componentWillUnmount() {
-  
-  const { searchData, pageProps } = this.props;
-  if(!searchData) {
-    this.getResourse(`https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${' '}&page=${pageProps}`)
-  .then(array => this.setState({
-    cards: array.results,
-    loading: false
-  }))
-  .catch(this.onError);
-  }
-  
-}
+
 
 onError = () => {
   this.setState({
