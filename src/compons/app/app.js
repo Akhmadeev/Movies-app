@@ -55,7 +55,7 @@ export default class App extends Component {
             </Tabs>
           </Col>
         </Row>
-  </div>
+      </div>
     );
   }
 }
