@@ -73,7 +73,7 @@ const Rated = () => {
     const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
     const overviewMove = card.overview;
     const idMove = card.id;
-    const voteMove = card.vote_average;
+    const voteMove = card.rating;
 
     return (
       <Col sm={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 430, height: 281 }}>
@@ -95,7 +95,7 @@ const Rated = () => {
               <Text code>drama</Text>
               <br />
               <Text>{shortText(overviewMove, 125)}</Text> <br />
-              <Rate allowHalf defaultValue={0} count={10} onChange={(star) => RateMovie(star, idMove)} />
+              <Rate allowHalf defaultValue={voteMove} count={10} onChange={(star) => RateMovie(star, idMove)} />
             </Col>
           </Row>
         </Card>
