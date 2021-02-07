@@ -1,26 +1,34 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'antd';
 
-export default class Search extends Component {
-    
-  
-    componentDidMount() {
-    }
-
-    render() {
-
-    const {searchText} = this.props;
-
+const Search = ({ searchText }) => {
+  if (searchText) {
     return (
-        <Input placeholder="Type to search..."  style={{ marginBottom: 30 }} onChange={(elm) => searchText(elm)} allowClear='true' />
-    )
-}
-}
+      <Input
+        placeholder="Type to search..."
+        style={{ marginBottom: 30 }}
+        onChange={(elm) => searchText(elm)}
+        allowClear="true"
+      />
+    );
+  }
+  return (
+    <Input
+      placeholder="Type to search..."
+      style={{ marginBottom: 30 }}
+      onChange={(elm) => searchText(elm)}
+      allowClear="true"
+    />
+  );
+ 
+};
+export default Search;
+
 Search.defaultProps = {
-    searchText: () => {}
-  }
-  
-  Search.propTypes = {
-    searchText: PropTypes.func
-  }
+  searchText: () => {},
+};
+
+Search.propTypes = {
+  searchText: PropTypes.func,
+};

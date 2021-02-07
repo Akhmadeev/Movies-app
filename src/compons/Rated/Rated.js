@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate } from 'antd';
 
-const Item = ({ pageProps, searchData }) => {
+const Rated = () => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -12,15 +11,14 @@ const Item = ({ pageProps, searchData }) => {
     setLoading(false);
     setError(true);
   };
-
   
- 
- 
-
   useEffect(() => {
+
     const getResourse = () => {
       fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${searchData}&page=${pageProps}`
+        `https://api.themoviedb.org/3/guest_session/${localStorage.getItem(
+          'guest_session_id'
+        )}/rated/movies?api_key=869cb700bbfae56825fae5c59c77dd18`
       )
         .then((res) => res.json())
         .then((body) => {
@@ -29,40 +27,26 @@ const Item = ({ pageProps, searchData }) => {
         })
         .catch(onError);
     };
+   
     getResourse();
-  }, [pageProps, searchData]);
+  }, []);
 
-    // const getToken = () => {
-    //   fetch('https://api.themoviedb.org/3/authentication/token/new?api_key=869cb700bbfae56825fae5c59c77dd18')
-    //     .then((res) => res.json())
-    //     .then((body) => {
-    //       localStorage.setItem('request_token', body.request_token);
-    //       const tokenKey = localStorage.getItem('request_token');
-    //       console.log(tokenKey);
-    //     });
-    // };
-
-  const getSessionGuest = () => {
-    fetch(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=869cb700bbfae56825fae5c59c77dd18`)
-      .then((body) => body.json())
-      .then((result) => localStorage.setItem('guest_session_id', result.guest_session_id))
-  }
-
-    useEffect(() => {
-      getSessionGuest();
-    }, []);
 
   const RateMovie = (rate, id) => {
-    fetch(`https://api.themoviedb.org/3/movie/${id}/rating?api_key=869cb700bbfae56825fae5c59c77dd18&guest_session_id=${localStorage.getItem('guest_session_id')}`, {
-      method: 'POST',
-      body: JSON.stringify({ value: rate }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',  
+    fetch(
+      `https://api.themoviedb.org/3/movie/${id}/rating?api_key=869cb700bbfae56825fae5c59c77dd18&guest_session_id=${localStorage.getItem(
+        'guest_session_id'
+      )}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ value: rate }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
       }
-    }) 
-      .then(response => response.json())
-  }
- 
+    )
+      .then((response) => response.json())
+  };
 
   const onErrorOffInternet = () => (
     <Alert message="Ошибка" description="Неполадки с интернетом" type="попробуйте перезагрузить страничку" showIcon />
@@ -82,30 +66,14 @@ const Item = ({ pageProps, searchData }) => {
     return pos === -1 ? longText : longText.substr(0, pos) + dots;
   };
 
-  // const fallback = (post) => {
-  //   const imgMove = `https://image.tmdb.org/t/p/w500${post}`;
-  //   if (imgMove) return <Spin tip="Loading..." size="large" />;
-    
-  //   return <Spin tip="Loading..." size="large" />;
-  // };
-
   const newItem = (card) => {
-     const { Text } = Typography;
-     const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
-     const nameMove = card.original_title;
-     const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
-     const overviewMove = card.overview;
-     const idMove = card.id;
+    const { Text } = Typography;
+    const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
+    const nameMove = card.original_title;
+    const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
+    const overviewMove = card.overview;
+    const idMove = card.id;
     const voteMove = card.vote_average;
-    
-    // const { Text } = Typography;
-    // const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`; // fallback(card.poster_path);
-    // const nameMove = card.original_title;
-    // const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
-    // const overviewMove = card.overview;
-    // const idMove = card.id;
-    // const voteMove = card.vote_average;
-
 
     return (
       <Col sm={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 430, height: 281 }}>
@@ -148,14 +116,5 @@ const Item = ({ pageProps, searchData }) => {
   );
 };
 
-export default Item;
+export default Rated;
 
-Item.defaultProps = {
-  pageProps: 1,
-  searchData: 'avengers',
-};
-
-Item.propTypes = {
-  pageProps: PropTypes.number,
-  searchData: PropTypes.string,
-};

@@ -3,8 +3,6 @@ import { render } from 'react-dom';
 import App from './compons/app/app';
 
 
-const Index = () => (
-  <App/>
-)
+const Index = () => <App />;
 
-render(<Index/>, document.getElementById('root'));
+render(<Index />, document.getElementById('root'));
