@@ -12,6 +12,8 @@ const Item = ({ pageProps, searchData }) => {
 
   const genres = useContext(GenresContext);
 
+  const { Text } = Typography;
+
   const onError = () => {
     setLoading(false);
     setError(true);
@@ -91,13 +93,13 @@ const Item = ({ pageProps, searchData }) => {
 
   function arrayGenres(arr, id) {
     const newArray = [];
-    for (let j = 0; j < id.length; j++) {
+    for (let j = 0; j < 2; j++) {
       for (let i = 0; i < arr.length; i++) {
         if (id[j] === arr[i].id) newArray.push(arr[i].name)
       }
     }
     if(newArray.length === 0)  return '...'
-    return newArray.join(', ');
+    return newArray.map((elem) => <Text code>{elem}</Text>);
   };
 
   const colorVoteAverage = (average) => {
@@ -111,15 +113,18 @@ const Item = ({ pageProps, searchData }) => {
 // От 5 до 7 - #E9D100
 // Выше 7 - #66E900
 
+
   const newItem = (card) => {
-    const { Text } = Typography;
+    
     const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
     const nameMove = card.original_title;
     const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
     const overviewMove = card.overview;
     const idMove = card.id;
     const voteMove = card.vote_average;
-    const genresMove = card.genre_ids
+    const genresMove = card.genre_ids;
+
+    
     
     // const genresArray = genres.filter(elem => genresMove.includes(elem.id)).map(elem => elem.name);
 
@@ -145,13 +150,12 @@ const Item = ({ pageProps, searchData }) => {
                 </Col>
                 <Col span={3}>
                   <div className={colorVoteAverage(voteMove)}>
-                    <Text >{voteMove}</Text>
+                    <Text>{voteMove}</Text>
                   </div>
                 </Col>
               </Row>
               <Text disabled>{dataMove}</Text> <br />
-              <Text code>{arrayGenres(genres, genresMove)}</Text>
-              <br />
+              <div> {arrayGenres(genres, genresMove)} </div>
               <Text>{shortText(overviewMove, 125)}</Text> <br />
               <Rate allowHalf defaultValue={0} count={10} onChange={(star) => RateMovie(star, idMove)} />
             </Col>
