@@ -10,6 +10,8 @@ const Rated = () => {
 
   const genres = useContext(GenresContext);
 
+  const { Text } = Typography;
+
   const onError = () => {
     setLoading(false);
     setError(true);
@@ -36,13 +38,13 @@ const Rated = () => {
 
     function arrayGenres(arr, id) {
       const newArray = [];
-      for (let j = 0; j < id.length; j++) {
+      for (let j = 0; j < 2; j++) {
         for (let i = 0; i < arr.length; i++) {
           if (id[j] === arr[i].id) newArray.push(arr[i].name);
         }
       }
       if (newArray.length === 0) return '...';
-      return newArray.join(', ');
+      return newArray.map((elem) => <Text code>{elem}</Text>);
     }
 
     const colorVoteAverage = (average) => {
@@ -87,7 +89,7 @@ const Rated = () => {
   };
 
   const newItem = (card) => {
-    const { Text } = Typography;
+
     const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
     const nameMove = card.original_title;
     const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
@@ -115,8 +117,7 @@ const Rated = () => {
                 </Col>
               </Row>
               <Text disabled>{dataMove}</Text> <br />
-              <Text code>{arrayGenres(genres, genresMove)}</Text>
-              <br />
+              <div> {arrayGenres(genres, genresMove)} </div>
               <Text>{shortText(overviewMove, 125)}</Text> <br />
               <Rate allowHalf defaultValue={voteMove} count={10} onChange={(star) => RateMovie(star, idMove)} />
             </Col>
