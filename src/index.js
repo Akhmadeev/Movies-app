@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { render } from 'react-dom';
 import App from './compons/app/app';
-import ThemeContext from './context/context'
+import GenresContext from './context/context';
 
 
 function Index() {
@@ -19,9 +19,9 @@ function Index() {
   }, [])
   
       return (
-        <ThemeContext.Provider value={genres}>
+        <GenresContext.Provider value={genres}>
           <App />;
-        </ThemeContext.Provider>
+        </GenresContext.Provider>
       );
     };
 

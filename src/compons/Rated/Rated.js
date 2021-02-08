@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate } from 'antd';
+import GenresContext from '../../context/context';
 
 const Rated = () => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  const genres = useContext(GenresContext);
 
   const onError = () => {
     setLoading(false);
@@ -31,6 +34,23 @@ const Rated = () => {
     getResourse();
   }, []);
 
+    function arrayGenres(arr, id) {
+      const newArray = [];
+      for (let y = 0; y < id.length; y++) {
+        for (let i = 0; i < arr.length; i++) {
+          if (id[y] === arr[i].id) newArray.push(arr[i].name);
+        }
+      }
+      if (newArray.length === 0) return '...';
+      return newArray.join(', ');
+    }
+
+    const colorVoteAverage = (average) => {
+      if (average < 3) return 'voteAverageThree voteAverage';
+      if (average < 5) return 'voteAverageFive voteAverage';
+      if (average < 7) return 'voteAverageSeven voteAverage';
+      return 'voteAverageMax voteAverage';
+    };
 
   const RateMovie = (rate, id) => {
     fetch(
@@ -74,6 +94,7 @@ const Rated = () => {
     const overviewMove = card.overview;
     const idMove = card.id;
     const voteMove = card.rating;
+    const genresMove = card.genre_ids;
 
     return (
       <Col sm={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 430, height: 281 }}>
@@ -88,11 +109,13 @@ const Rated = () => {
                   <Text strong>{nameMove}</Text>
                 </Col>
                 <Col span={3}>
-                  <Text type="warning">{voteMove} </Text>
+                  <div className={colorVoteAverage(voteMove)}>
+                    <Text>{voteMove}</Text>
+                  </div>
                 </Col>
               </Row>
               <Text disabled>{dataMove}</Text> <br />
-              <Text code>drama</Text>
+              <Text code>{arrayGenres(genres, genresMove)}</Text>
               <br />
               <Text>{shortText(overviewMove, 125)}</Text> <br />
               <Rate allowHalf defaultValue={voteMove} count={10} onChange={(star) => RateMovie(star, idMove)} />

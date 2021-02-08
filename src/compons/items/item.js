@@ -3,14 +3,14 @@ import './item.css';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate } from 'antd';
-import ThemeContext from '../../context/context'
+import GenresContext from '../../context/context'
 
 const Item = ({ pageProps, searchData }) => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const genres = useContext(ThemeContext);
+  const genres = useContext(GenresContext);
 
   const onError = () => {
     setLoading(false);
@@ -101,10 +101,10 @@ const Item = ({ pageProps, searchData }) => {
   };
 
   const colorVoteAverage = (average) => {
-    if (average < 3) return 'voteAverageThree';
-    if (average < 5) return 'voteAverageFive';
-    if (average < 7) return 'voteAverageSeven';
-    return 'voteAverageMax'
+    if (average < 3) return 'voteAverageThree voteAverage';
+    if (average < 5) return 'voteAverageFive voteAverage';
+    if (average < 7) return 'voteAverageSeven voteAverage';
+    return 'voteAverageMax voteAverage';
   }
 //   От 0 до 3 - #E90000
 // От 3 до 5 - #E97E00
