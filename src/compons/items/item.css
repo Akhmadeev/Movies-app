@@ -1,0 +1,42 @@
+.voteAverageThree {
+  border: 1px solid #e90000;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.voteAverageFive {
+  border: 1px solid #e97e00;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.voteAverageSeven {
+  border: 1px solid #e9d100;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.voteAverageMax {
+  border: 1px solid #66e900;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 
+От 0 до 3 - #E90000
+От 3 до 5 - #E97E00
+От 5 до 7 - #E9D100
+Выше 7 - #66E900 */

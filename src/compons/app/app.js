@@ -6,6 +6,8 @@ import Item from '../items/item';
 import Search from '../Search/search';
 import Rated from '../Rated/Rated';
 
+
+
 const App = () => {
 
 

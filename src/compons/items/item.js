@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import './item.css';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate } from 'antd';
+import ThemeContext from '../../context/context'
 
 const Item = ({ pageProps, searchData }) => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const genres = useContext(ThemeContext);
+
   const onError = () => {
     setLoading(false);
     setError(true);
   };
-
-  
- 
- 
 
   useEffect(() => {
     const getResourse = () => {
@@ -89,15 +89,38 @@ const Item = ({ pageProps, searchData }) => {
   //   return <Spin tip="Loading..." size="large" />;
   // };
 
+  function arrayGenres(arr, id) {
+    const newArray = [];
+    for (let y = 0; y < id.length; y++) {
+      for (let i = 0; i < arr.length; i++) {
+        if (id[y] === arr[i].id) newArray.push(arr[i].name)
+      }
+    }
+    if(newArray.length === 0)  return '...'
+    return newArray.join(', ');
+  };
+
+  const colorVoteAverage = (average) => {
+    if (average < 3) return 'voteAverageThree';
+    if (average < 5) return 'voteAverageFive';
+    if (average < 7) return 'voteAverageSeven';
+    return 'voteAverageMax'
+  }
+//   От 0 до 3 - #E90000
+// От 3 до 5 - #E97E00
+// От 5 до 7 - #E9D100
+// Выше 7 - #66E900
+
   const newItem = (card) => {
-     const { Text } = Typography;
-     const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
-     const nameMove = card.original_title;
-     const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
-     const overviewMove = card.overview;
-     const idMove = card.id;
+    const { Text } = Typography;
+    const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
+    const nameMove = card.original_title;
+    const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
+    const overviewMove = card.overview;
+    const idMove = card.id;
     const voteMove = card.vote_average;
-    
+     const genresMove = card.genre_ids
+
     // const { Text } = Typography;
     // const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`; // fallback(card.poster_path);
     // const nameMove = card.original_title;
@@ -105,7 +128,6 @@ const Item = ({ pageProps, searchData }) => {
     // const overviewMove = card.overview;
     // const idMove = card.id;
     // const voteMove = card.vote_average;
-
 
     return (
       <Col sm={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 430, height: 281 }}>
@@ -120,11 +142,13 @@ const Item = ({ pageProps, searchData }) => {
                   <Text strong>{nameMove}</Text>
                 </Col>
                 <Col span={3}>
-                  <Text type="warning">{voteMove} </Text>
+                  <div className={colorVoteAverage(voteMove)}>
+                    <Text >{voteMove}</Text>
+                  </div>
                 </Col>
               </Row>
               <Text disabled>{dataMove}</Text> <br />
-              <Text code>drama</Text>
+              <Text code>{arrayGenres(genres, genresMove)}</Text>
               <br />
               <Text>{shortText(overviewMove, 125)}</Text> <br />
               <Rate allowHalf defaultValue={0} count={10} onChange={(star) => RateMovie(star, idMove)} />
