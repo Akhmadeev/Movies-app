@@ -91,9 +91,9 @@ const Item = ({ pageProps, searchData }) => {
 
   function arrayGenres(arr, id) {
     const newArray = [];
-    for (let y = 0; y < id.length; y++) {
+    for (let j = 0; j < id.length; j++) {
       for (let i = 0; i < arr.length; i++) {
-        if (id[y] === arr[i].id) newArray.push(arr[i].name)
+        if (id[j] === arr[i].id) newArray.push(arr[i].name)
       }
     }
     if(newArray.length === 0)  return '...'
@@ -119,7 +119,9 @@ const Item = ({ pageProps, searchData }) => {
     const overviewMove = card.overview;
     const idMove = card.id;
     const voteMove = card.vote_average;
-     const genresMove = card.genre_ids
+    const genresMove = card.genre_ids
+    
+    // const genresArray = genres.filter(elem => genresMove.includes(elem.id)).map(elem => elem.name);
 
     // const { Text } = Typography;
     // const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`; // fallback(card.poster_path);

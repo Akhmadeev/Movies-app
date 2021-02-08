@@ -36,9 +36,9 @@ const Rated = () => {
 
     function arrayGenres(arr, id) {
       const newArray = [];
-      for (let y = 0; y < id.length; y++) {
+      for (let j = 0; j < id.length; j++) {
         for (let i = 0; i < arr.length; i++) {
-          if (id[y] === arr[i].id) newArray.push(arr[i].name);
+          if (id[j] === arr[i].id) newArray.push(arr[i].name);
         }
       }
       if (newArray.length === 0) return '...';
