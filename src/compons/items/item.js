@@ -3,9 +3,9 @@ import './item.css';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate } from 'antd';
-import GenresContext from '../../context/context'
+import GenresContext from '../../context/context';
 
-const Item = ({ pageProps, searchData }) => {
+const Item = ({ pageProps, searchData}) => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -34,37 +34,40 @@ const Item = ({ pageProps, searchData }) => {
     getResourse();
   }, [pageProps, searchData]);
 
-    // const getToken = () => {
-    //   fetch('https://api.themoviedb.org/3/authentication/token/new?api_key=869cb700bbfae56825fae5c59c77dd18')
-    //     .then((res) => res.json())
-    //     .then((body) => {
-    //       localStorage.setItem('request_token', body.request_token);
-    //       const tokenKey = localStorage.getItem('request_token');
-    //       console.log(tokenKey);
-    //     });
-    // };
+  // const getToken = () => {
+  //   fetch('https://api.themoviedb.org/3/authentication/token/new?api_key=869cb700bbfae56825fae5c59c77dd18')
+  //     .then((res) => res.json())
+  //     .then((body) => {
+  //       localStorage.setItem('request_token', body.request_token);
+  //       const tokenKey = localStorage.getItem('request_token');
+  //       console.log(tokenKey);
+  //     });
+  // };
 
   const getSessionGuest = () => {
     fetch(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=869cb700bbfae56825fae5c59c77dd18`)
       .then((body) => body.json())
-      .then((result) => localStorage.setItem('guest_session_id', result.guest_session_id))
-  }
+      .then((result) => localStorage.setItem('guest_session_id', result.guest_session_id));
+  };
 
-    useEffect(() => {
-      getSessionGuest();
-    }, []);
+  useEffect(() => {
+    getSessionGuest();
+  }, []);
 
   const RateMovie = (rate, id) => {
-    fetch(`https://api.themoviedb.org/3/movie/${id}/rating?api_key=869cb700bbfae56825fae5c59c77dd18&guest_session_id=${localStorage.getItem('guest_session_id')}`, {
-      method: 'POST',
-      body: JSON.stringify({ value: rate }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',  
+    fetch(
+      `https://api.themoviedb.org/3/movie/${id}/rating?api_key=869cb700bbfae56825fae5c59c77dd18&guest_session_id=${localStorage.getItem(
+        'guest_session_id'
+      )}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ value: rate }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
       }
-    }) 
-      .then(response => response.json())
-  }
- 
+    ).then((response) => response.json());
+  };
 
   const onErrorOffInternet = () => (
     <Alert message="Ошибка" description="Неполадки с интернетом" type="попробуйте перезагрузить страничку" showIcon />
@@ -87,7 +90,7 @@ const Item = ({ pageProps, searchData }) => {
   // const fallback = (post) => {
   //   const imgMove = `https://image.tmdb.org/t/p/w500${post}`;
   //   if (imgMove) return <Spin tip="Loading..." size="large" />;
-    
+
   //   return <Spin tip="Loading..." size="large" />;
   // };
 
@@ -95,27 +98,25 @@ const Item = ({ pageProps, searchData }) => {
     const newArray = [];
     for (let j = 0; j < 2; j++) {
       for (let i = 0; i < arr.length; i++) {
-        if (id[j] === arr[i].id) newArray.push(arr[i].name)
+        if (id[j] === arr[i].id) newArray.push(arr[i].name);
       }
     }
-    if(newArray.length === 0)  return '...'
-    return newArray.map((elem) => <Text code>{elem}</Text>);
-  };
+    if (newArray.length === 0) return '...';
+    return newArray.map((elem) => (
+      <Text key={elem} code>
+        {elem}
+      </Text>
+    ));
+  }
 
   const colorVoteAverage = (average) => {
     if (average < 3) return 'voteAverageThree voteAverage';
     if (average < 5) return 'voteAverageFive voteAverage';
     if (average < 7) return 'voteAverageSeven voteAverage';
     return 'voteAverageMax voteAverage';
-  }
-//   От 0 до 3 - #E90000
-// От 3 до 5 - #E97E00
-// От 5 до 7 - #E9D100
-// Выше 7 - #66E900
-
+  };
 
   const newItem = (card) => {
-    
     const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
     const nameMove = card.original_title;
     const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
@@ -124,8 +125,6 @@ const Item = ({ pageProps, searchData }) => {
     const voteMove = card.vote_average;
     const genresMove = card.genre_ids;
 
-    
-    
     // const genresArray = genres.filter(elem => genresMove.includes(elem.id)).map(elem => elem.name);
 
     // const { Text } = Typography;
@@ -137,11 +136,17 @@ const Item = ({ pageProps, searchData }) => {
     // const voteMove = card.vote_average;
 
     return (
-      <Col sm={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 430, height: 281 }}>
+      <Col
+        sm={{ span: 24 }}
+        lg={{ span: 10 }}
+        xl={{ span: 10 }}
+        key={idMove}
+        style={{ minWidth: 430, height: 281, marginBottom: 16, marginLeft: 10 }}
+      >
         <Card style={{ width: 430, height: 281 }}>
           <Row>
             <Col span={12}>
-              <Image width={183} height={241} src={imgMove} />
+              <Image style={{ width: 183, height: 241 }} src={imgMove} />
             </Col>
             <Col span={12}>
               <Row>
@@ -172,7 +177,7 @@ const Item = ({ pageProps, searchData }) => {
   if (cards.length === 0) return <Alert type="error" message="по вашему запросу не найдено фильмов" banner />;
 
   return (
-    <Row gutter={{ xs: 8, sm: 16, md: 24 }} justify="center">
+    <Row gutter={{ xs: 8, sm: 16 }} justify="center">
       {cards.map((card) => newItem(card))}
     </Row>
   );

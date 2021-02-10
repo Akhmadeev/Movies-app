@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate } from 'antd';
 import GenresContext from '../../context/context';
 
-const Rated = () => {
+const Rated = ({active, setActive}) => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+   // const [active, setActive] = useState(false)
 
   const genres = useContext(GenresContext);
 
@@ -16,9 +18,8 @@ const Rated = () => {
     setLoading(false);
     setError(true);
   };
-  
-  useEffect(() => {
 
+  useEffect(() => {
     const getResourse = () => {
       fetch(
         `https://api.themoviedb.org/3/guest_session/${localStorage.getItem(
@@ -32,27 +33,30 @@ const Rated = () => {
         })
         .catch(onError);
     };
-   
     getResourse();
-  }, []);
+    
+  }, [active]);
 
-    function arrayGenres(arr, id) {
-      const newArray = [];
-      for (let j = 0; j < 2; j++) {
-        for (let i = 0; i < arr.length; i++) {
-          if (id[j] === arr[i].id) newArray.push(arr[i].name);
-        }
+    
+
+
+  function arrayGenres(arr, id) {
+    const newArray = [];
+    for (let j = 0; j < 2; j++) {
+      for (let i = 0; i < arr.length; i++) {
+        if (id[j] === arr[i].id) newArray.push(arr[i].name);
       }
-      if (newArray.length === 0) return '...';
-      return newArray.map((elem) => <Text code>{elem}</Text>);
     }
+    if (newArray.length === 0) return '...';
+    return newArray.map((elem) => <Text key={elem + id} code>{elem}</Text>);
+  }
 
-    const colorVoteAverage = (average) => {
-      if (average < 3) return 'voteAverageThree voteAverage';
-      if (average < 5) return 'voteAverageFive voteAverage';
-      if (average < 7) return 'voteAverageSeven voteAverage';
-      return 'voteAverageMax voteAverage';
-    };
+  const colorVoteAverage = (average) => {
+    if (average < 3) return 'voteAverageThree voteAverage';
+    if (average < 5) return 'voteAverageFive voteAverage';
+    if (average < 7) return 'voteAverageSeven voteAverage';
+    return 'voteAverageMax voteAverage';
+  };
 
   const RateMovie = (rate, id) => {
     fetch(
@@ -66,8 +70,7 @@ const Rated = () => {
           'Content-type': 'application/json; charset=UTF-8',
         },
       }
-    )
-      .then((response) => response.json())
+    ).then((response) => response.json());
   };
 
   const onErrorOffInternet = () => (
@@ -88,8 +91,10 @@ const Rated = () => {
     return pos === -1 ? longText : longText.substr(0, pos) + dots;
   };
 
-  const newItem = (card) => {
+  
+  useEffect(() => setActive(false))
 
+  const newItem = (card) => {
     const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
     const nameMove = card.original_title;
     const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
@@ -103,7 +108,7 @@ const Rated = () => {
         <Card style={{ width: 430, height: 281 }}>
           <Row>
             <Col span={12}>
-              <Image width={183} height={241} src={imgMove} />
+              <Image style={{ width: 183, height: 241 }} src={imgMove} />
             </Col>
             <Col span={12}>
               <Row>
@@ -132,7 +137,7 @@ const Rated = () => {
 
   if (!navigator.onLine) return onErrorOffInternet();
   if (cards.length === 0) return <Alert type="error" message="по вашему запросу не найдено фильмов" banner />;
-
+  
   return (
     <Row gutter={{ xs: 8, sm: 16, md: 24 }} justify="center">
       {cards.map((card) => newItem(card))}
@@ -141,4 +146,14 @@ const Rated = () => {
 };
 
 export default Rated;
+
+Rated.defaultProps = {
+  active: true,
+  setActive: () => {},
+};
+
+Rated.propTypes = {
+  active: PropTypes.bool,
+  setActive: PropTypes.func,
+};
 
