@@ -19,8 +19,7 @@
   border: 1px solid #66e900;
 }
 .item_card {
-  margin: 10px;
-  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.15));
 }
 
 /* 

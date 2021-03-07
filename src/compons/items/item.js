@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate } from 'antd';
 import GenresContext from '../../context/context';
+import Service from '../../Service';
 
-const Item = ({ pageProps, searchData}) => {
+const Item = ({ pageProps, searchData }) => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -20,18 +21,7 @@ const Item = ({ pageProps, searchData}) => {
   };
 
   useEffect(() => {
-    const getResourse = () => {
-      fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${searchData}&page=${pageProps}`
-      )
-        .then((res) => res.json())
-        .then((body) => {
-          setCards(body.results);
-          setLoading(false);
-        })
-        .catch(onError);
-    };
-    getResourse();
+    Service.getResourse(setCards, setLoading, onError, searchData, pageProps);
   }, [pageProps, searchData]);
 
   // const getToken = () => {
@@ -44,30 +34,9 @@ const Item = ({ pageProps, searchData}) => {
   //     });
   // };
 
-  const getSessionGuest = () => {
-    fetch(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=869cb700bbfae56825fae5c59c77dd18`)
-      .then((body) => body.json())
-      .then((result) => localStorage.setItem('guest_session_id', result.guest_session_id));
-  };
-
   useEffect(() => {
-    getSessionGuest();
+    Service.getSessionGuest();
   }, []);
-
-  const RateMovie = (rate, id) => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/${id}/rating?api_key=869cb700bbfae56825fae5c59c77dd18&guest_session_id=${localStorage.getItem(
-        'guest_session_id'
-      )}`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ value: rate }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-      }
-    ).then((response) => response.json());
-  };
 
   const onErrorOffInternet = () => (
     <Alert message="Ошибка" description="Неполадки с интернетом" type="попробуйте перезагрузить страничку" showIcon />
@@ -137,13 +106,14 @@ const Item = ({ pageProps, searchData}) => {
 
     return (
       <Col
+        className="item_card"
         sm={{ span: 24 }}
         lg={{ span: 10 }}
         xl={{ span: 10 }}
         key={idMove}
-        style={{ minWidth: 430, height: 281, marginBottom: 16, marginLeft: 10 }}
+        style={{ minWidth: 430, height: 320, marginBottom: 16, marginLeft: 10 }}
       >
-        <Card style={{ width: 430, height: 281 }}>
+        <Card style={{ width: 430, height: 320 }}>
           <Row>
             <Col span={12}>
               <Image style={{ width: 183, height: 241 }} src={imgMove} />
@@ -162,7 +132,7 @@ const Item = ({ pageProps, searchData}) => {
               <Text disabled>{dataMove}</Text> <br />
               <div> {arrayGenres(genres, genresMove)} </div>
               <Text>{shortText(overviewMove, 125)}</Text> <br />
-              <Rate allowHalf defaultValue={0} count={10} onChange={(star) => RateMovie(star, idMove)} />
+              <Rate allowHalf defaultValue={0} count={10} onChange={(star) => Service.RateMovie(star, idMove)} />
             </Col>
           </Row>
         </Card>

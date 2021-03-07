@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
+import './rated.css';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { Row, Card, Image, Col, Spin, Alert, Typography, Rate } from 'antd';
 import GenresContext from '../../context/context';
+import Service from '../../Service';
 
-const Rated = ({active, setActive}) => {
+const Rated = ({ active, setActive }) => {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-   // const [active, setActive] = useState(false)
+  // const [active, setActive] = useState(false)
 
   const genres = useContext(GenresContext);
 
@@ -20,25 +22,8 @@ const Rated = ({active, setActive}) => {
   };
 
   useEffect(() => {
-    const getResourse = () => {
-      fetch(
-        `https://api.themoviedb.org/3/guest_session/${localStorage.getItem(
-          'guest_session_id'
-        )}/rated/movies?api_key=869cb700bbfae56825fae5c59c77dd18`
-      )
-        .then((res) => res.json())
-        .then((body) => {
-          setCards(body.results);
-          setLoading(false);
-        })
-        .catch(onError);
-    };
-    getResourse();
-    
+    Service.getResourseRated(setCards, setLoading, onError);
   }, [active]);
-
-    
-
 
   function arrayGenres(arr, id) {
     const newArray = [];
@@ -48,7 +33,11 @@ const Rated = ({active, setActive}) => {
       }
     }
     if (newArray.length === 0) return '...';
-    return newArray.map((elem) => <Text key={elem + id} code>{elem}</Text>);
+    return newArray.map((elem) => (
+      <Text key={elem + id} code>
+        {elem}
+      </Text>
+    ));
   }
 
   const colorVoteAverage = (average) => {
@@ -56,21 +45,6 @@ const Rated = ({active, setActive}) => {
     if (average < 5) return 'voteAverageFive voteAverage';
     if (average < 7) return 'voteAverageSeven voteAverage';
     return 'voteAverageMax voteAverage';
-  };
-
-  const RateMovie = (rate, id) => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/${id}/rating?api_key=869cb700bbfae56825fae5c59c77dd18&guest_session_id=${localStorage.getItem(
-        'guest_session_id'
-      )}`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ value: rate }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-      }
-    ).then((response) => response.json());
   };
 
   const onErrorOffInternet = () => (
@@ -91,8 +65,7 @@ const Rated = ({active, setActive}) => {
     return pos === -1 ? longText : longText.substr(0, pos) + dots;
   };
 
-  
-  useEffect(() => setActive(false))
+  useEffect(() => setActive(false));
 
   const newItem = (card) => {
     const imgMove = `https://image.tmdb.org/t/p/w500${card.poster_path}`;
@@ -104,7 +77,14 @@ const Rated = ({active, setActive}) => {
     const genresMove = card.genre_ids;
 
     return (
-      <Col sm={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }} key={idMove} style={{ minWidth: 430, height: 281 }}>
+      <Col
+        className="item_card"
+        sm={{ span: 24 }}
+        lg={{ span: 12 }}
+        xl={{ span: 10 }}
+        key={idMove}
+        style={{ minWidth: 430, height: 281 }}
+      >
         <Card style={{ width: 430, height: 281 }}>
           <Row>
             <Col span={12}>
@@ -124,7 +104,7 @@ const Rated = ({active, setActive}) => {
               <Text disabled>{dataMove}</Text> <br />
               <div> {arrayGenres(genres, genresMove)} </div>
               <Text>{shortText(overviewMove, 125)}</Text> <br />
-              <Rate allowHalf defaultValue={voteMove} count={10} onChange={(star) => RateMovie(star, idMove)} />
+              <Rate allowHalf defaultValue={voteMove} count={10} onChange={(star) => Service.RateMovie(star, idMove)} />
             </Col>
           </Row>
         </Card>
@@ -137,7 +117,7 @@ const Rated = ({active, setActive}) => {
 
   if (!navigator.onLine) return onErrorOffInternet();
   if (cards.length === 0) return <Alert type="error" message="по вашему запросу не найдено фильмов" banner />;
-  
+
   return (
     <Row gutter={{ xs: 8, sm: 16, md: 24 }} justify="center">
       {cards.map((card) => newItem(card))}
@@ -156,4 +136,3 @@ Rated.propTypes = {
   active: PropTypes.bool,
   setActive: PropTypes.func,
 };
-
