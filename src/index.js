@@ -6,10 +6,13 @@ import './index.css';
 import Service from './Service';
 
 function Index() {
+
+  const apiService = new Service;
   const [genres, setGenres] = useState([]);
 
+
   useEffect(() => {
-    Service.getGenres(setGenres);
+    apiService.getGenres().then((result) => setGenres(result.genres));
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Tabs, Pagination } from 'antd';
+import { Row, Col, Tabs } from 'antd';
 import { debounce } from 'lodash';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import Item from '../items/item';
@@ -8,7 +8,6 @@ import Rated from '../Rated/Rated';
 
 const App = () => {
   const [searchData, setSearchData] = useState('man');
-  const [page, setPage] = useState(1);
   const [active, setActive] = useState(true);
 
   const activeTab = (key) => {
@@ -18,10 +17,6 @@ const App = () => {
   const searchText = (value) => {
     const text = value.target.value;
     setSearchData(text);
-  };
-
-  const pageFunc = (value) => {
-    setPage(value);
   };
 
   const { TabPane } = Tabs;
@@ -40,24 +35,12 @@ const App = () => {
           >
             <TabPane tab="Search" key="Search">
               <Search searchText={debouncFunc} />
-              <Item pageProps={page} searchData={searchData} />
-              <Pagination
-                size="small"
-                className="pagination_block"
-                defaultCurrent={1}
-                onChange={(el) => pageFunc(el)}
-                total={50}
-              />
+              <Item  searchData={searchData} />
+             
             </TabPane>
             <TabPane tab="Rated" key="Rated1">
               <Rated setActive={setActive} active={active} />
-              <Pagination
-                size="small"
-                className="pagination_block"
-                defaultCurrent={1}
-                onChange={(el) => pageFunc(el)}
-                total={50}
-              />
+              
             </TabPane>
           </Tabs>
         </Col>

@@ -1,33 +1,26 @@
-class Services {
-  getGenres = (getItem) => {
-    fetch('https://api.themoviedb.org/3/genre/movie/list?api_key=869cb700bbfae56825fae5c59c77dd18')
-      .then((response) => response.json())
-      .then((result) => getItem(result.genres));
-  };
+export default class Services {
+  baseUrl = 'https://api.themoviedb.org/3';
 
-  getResourse = (getCardds, loading, err, data, page) => {
-    fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=869cb700bbfae56825fae5c59c77dd18&query=${data}&page=${page}`
-    )
-      .then((res) => res.json())
-      .then((body) => {
-        getCardds(body.results);
-        loading(false);
-      })
-      .catch(err);
-  };
+  apiKey = 'api_key=869cb700bbfae56825fae5c59c77dd18';
 
-  getSessionGuest = () => {
-    fetch(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=869cb700bbfae56825fae5c59c77dd18`)
-      .then((body) => body.json())
-      .then((result) => localStorage.setItem('guest_session_id', result.guest_session_id));
-  };
+  getResourse = async (url, option) => {
+    const res = await fetch(url, option);
+    if (!res.ok) throw new Error(res.status);
+    const body = await res.json();
+    return body;
+  }
+  
+  getGenres = () => this.getResourse(`${this.baseUrl}/genre/movie/list?${this.apiKey}`);
 
-  RateMovie = (rate, id) => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/${id}/rating?api_key=869cb700bbfae56825fae5c59c77dd18&guest_session_id=${localStorage.getItem(
-        'guest_session_id'
-      )}`,
+  getResourseApi = (data, page) => this.getResourse(`${this.baseUrl}/search/movie?${this.apiKey}&query=${data}&page=${page}`);
+
+  getSessionGuest() {
+   return this.getResourse(`${this.baseUrl}/authentication/guest_session/new?${this.apiKey}`)
+  }
+
+  RateMovie (rate, id){
+     return this.getResourse(
+      `${this.baseUrl}/movie/${id}/rating?${this.apiKey}&guest_session_id=${localStorage.getItem('guest_session_id')}`,
       {
         method: 'POST',
         body: JSON.stringify({ value: rate }),
@@ -35,21 +28,10 @@ class Services {
           'Content-type': 'application/json; charset=UTF-8',
         },
       }
-    ).then((response) => response.json());
-  };
+    );
+  }
 
-  getResourseRated = (cards, loading, error) => {
-    fetch(
-      `https://api.themoviedb.org/3/guest_session/${localStorage.getItem(
-        'guest_session_id'
-      )}/rated/movies?api_key=869cb700bbfae56825fae5c59c77dd18`
-    )
-      .then((res) => res.json())
-      .then((body) => {
-        cards(body.results);
-        loading(false);
-      })
-      .catch(error);
-  };
+  getResourseRated = () => this.getResourse(
+      `${this.baseUrl}/guest_session/${localStorage.getItem('guest_session_id')}/rated/movies?${this.apiKey}`
+    );
 }
-export default new Services();
