@@ -58,7 +58,7 @@ const Rated = ({ active, setActive }) => {
   return (
     <Row gutter={{ xs: 8, sm: 16, md: 24 }} justify="center">
       {cards.map((card) => (
-        <CardMovie key={card.id} card={card} rating="rating" />
+        <CardMovie key={card.id} card={card} />
       ))}
     </Row>
   );

@@ -58,7 +58,7 @@ const Item = ({ searchData }) => {
   return (
     <Row gutter={{ xs: 8, sm: 16 }} justify="center">
       {cards.map((card) => (
-        <CardMovie key={card.id} card={card} rating='vote_average'/>
+        <CardMovie key={card.id} card={card} />
       ))}
       <Pagination
         size="small"
