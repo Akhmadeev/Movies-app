@@ -6,24 +6,18 @@ export const colorVoteAverage = (average) => {
 };
 
 export function arrayGenres(arr, id) {
-  if (id && arr) {
-     const newArray = [];
-     for (let j = 0; j < 2; j++) {
-       for (let i = 0; i < arr.length; i++) {
-         if (id[j] === arr[i].id) newArray.push(arr[i].name);
-       }
+   const newArray = [];
+   for (let j = 0; j < 2; j++) {
+     for (let i = 0; i < arr.length; i++) {
+       if (id[j] === arr[i].id) newArray.push(arr[i].name);
      }
-     if (newArray.length === 0) return '...';
-     return newArray.map((elem) => ({ elem }));
    }
-   return '...'
+   if (newArray.length === 0) return '...';
+   return newArray.map((elem) => ({elem}));
 }
  
 export const shortText = (longText, maxLength) => {
-  if (longText && maxLength) {
-const dots = '...';
-const pos = longText.indexOf(' ', maxLength);
-return pos === -1 ? longText : longText.substr(0, pos) + dots;
-  }
-  return '...'
+  const dots = '...';
+  const pos = longText.indexOf(' ', maxLength);
+  return pos === -1 ? longText : longText.substr(0, pos) + dots;
 };
