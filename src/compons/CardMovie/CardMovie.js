@@ -50,7 +50,7 @@ const CardMovie = (card, rating) => {
               </Row>
               <Text disabled>{dataMove}</Text> <br />
               <div>
-                <Text>{genres && arrayGenres(genres, genresMove)}</Text>{' '}
+                <Text>{arrayGenres(genres, genresMove)}</Text>
               </div>
               <Text>{shortText(overviewMove, 125)}</Text> <br />
               <Rate allowHalf defaultValue={0} count={10} onChange={(star) => apiService.RateMovie(star, idMove)} />

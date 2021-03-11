@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './item.css';
+import './itemList.css';
 import PropTypes from 'prop-types';
 import { Row, Spin, Alert, Pagination } from 'antd';
 import Service from '../../Service';
 import CardMovie from '../CardMovie/CardMovie';
 
-const Item = ({ searchData }) => {
+const ItemList = ({ searchData }) => {
   const apiService = new Service();
 
   const [cards, setCards] = useState([]);
@@ -71,12 +71,12 @@ const Item = ({ searchData }) => {
   );
 };
 
-export default Item;
+export default ItemList;
 
-Item.defaultProps = {
+ItemList.defaultProps = {
   searchData: 'avengers',
 };
 
-Item.propTypes = {
+ItemList.propTypes = {
   searchData: PropTypes.string,
 };

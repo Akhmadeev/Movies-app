@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Tabs } from 'antd';
 import { debounce } from 'lodash';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import Item from '../items/item';
+import ItemList from '../itemList/itemList';
 import Search from '../Search/search';
 import Rated from '../Rated/Rated';
 
@@ -35,12 +35,10 @@ const App = () => {
           >
             <TabPane tab="Search" key="Search">
               <Search searchText={debouncFunc} />
-              <Item  searchData={searchData} />
-             
+              <ItemList searchData={searchData} />
             </TabPane>
             <TabPane tab="Rated" key="Rated1">
               <Rated setActive={setActive} active={active} />
-              
             </TabPane>
           </Tabs>
         </Col>
