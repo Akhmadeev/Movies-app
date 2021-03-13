@@ -5,28 +5,13 @@ import { format } from 'date-fns';
 import { Card, Image, Col, Row, Typography, Rate } from 'antd';
 import GenresContext from '../../context/context';
 import Service from '../../Service';
-import { colorVoteAverage } from '../../utils';
+import { colorVoteAverage, shortText, arrayGenres } from '../../utils';
 
 
 
 const CardMovie = ({card}) => {
 
-  const shortText = (longText, maxLength) => {
-    const dots = '...';
-    const pos = longText.indexOf(' ', maxLength);
-    return pos === -1 ? longText : longText.substr(0, pos) + dots;
-  };
 
-  function arrayGenres(arr, id) {
-    const newArray = [];
-    for (let j = 0; j < 2; j++) {
-      for (let i = 0; i < arr.length; i++) {
-        if (id[j] === arr[i].id) newArray.push(arr[i].name);
-      }
-    }
-    if (newArray.length === 0) return '...';
-    return newArray.map((elem) => (elem));
-  }
 
   const genres = useContext(GenresContext);
   const apiService = new Service();
