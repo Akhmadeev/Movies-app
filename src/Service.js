@@ -14,11 +14,9 @@ export default class Services {
 
   getResourseApi = (data, page) => this.getResourse(`${this.baseUrl}/search/movie?${this.apiKey}&query=${data}&page=${page}`);
 
-  getSessionGuest() {
-   return this.getResourse(`${this.baseUrl}/authentication/guest_session/new?${this.apiKey}`)
-  }
+  getSessionGuest = () => this.getResourse(`${this.baseUrl}/authentication/guest_session/new?${this.apiKey}`);
 
-  RateMovie (rate, id){
+  RateMovie(rate, id) {
      return this.getResourse(
       `${this.baseUrl}/movie/${id}/rating?${this.apiKey}&guest_session_id=${localStorage.getItem('guest_session_id')}`,
       {

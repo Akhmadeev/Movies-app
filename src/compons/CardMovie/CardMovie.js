@@ -1,15 +1,33 @@
 import React, {  useContext } from 'react';
+import PropTypes from 'prop-types';
 import './card.css';
 import { format } from 'date-fns';
 import { Card, Image, Col, Row, Typography, Rate } from 'antd';
 import GenresContext from '../../context/context';
 import Service from '../../Service';
-import { colorVoteAverage, arrayGenres, shortText } from '../../utils';
+import { colorVoteAverage } from '../../utils';
 
 
 
-const CardMovie = (card, rating) => {
-    
+const CardMovie = ({card}) => {
+
+  const shortText = (longText, maxLength) => {
+    const dots = '...';
+    const pos = longText.indexOf(' ', maxLength);
+    return pos === -1 ? longText : longText.substr(0, pos) + dots;
+  };
+
+  function arrayGenres(arr, id) {
+    const newArray = [];
+    for (let j = 0; j < 2; j++) {
+      for (let i = 0; i < arr.length; i++) {
+        if (id[j] === arr[i].id) newArray.push(arr[i].name);
+      }
+    }
+    if (newArray.length === 0) return '...';
+    return newArray.map((elem) => (elem));
+  }
+
   const genres = useContext(GenresContext);
   const apiService = new Service();
   const { Text } = Typography;
@@ -19,9 +37,9 @@ const CardMovie = (card, rating) => {
     const dataMove = card.release_date ? format(new Date(card.release_date), 'PP') : null;
     const overviewMove = card.overview;
     const idMove = card.id;
-  const voteMove = card[rating];
+  const voteMove = card.vote_average;
   // const voteMove = card.vote_average;
-    const genresMove = card.genre_ids;
+  const genresMove = card.genre_ids;
 
     return (
       <Col
@@ -29,7 +47,7 @@ const CardMovie = (card, rating) => {
         sm={{ span: 24 }}
         lg={{ span: 10 }}
         xl={{ span: 10 }}
-        key={idMove + nameMove}
+        key={idMove}
         style={{ minWidth: 430, height: 320, marginBottom: 16, marginLeft: 10 }}
       >
         <Card style={{ width: 430, height: 320 }}>
@@ -59,5 +77,17 @@ const CardMovie = (card, rating) => {
         </Card>
       </Col>
     );
-  };
+};
+  
 export default CardMovie;
+
+
+CardMovie.defaultProps = {
+  card: {},
+};
+
+CardMovie.propTypes = {
+  card: PropTypes.shape({
+    id: PropTypes.number
+  })
+};
