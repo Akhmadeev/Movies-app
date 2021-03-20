@@ -16,8 +16,7 @@ export default class Services {
 
   getSessionGuest = () => this.getResourse(`${this.baseUrl}/authentication/guest_session/new?${this.apiKey}`);
 
-  RateMovie(rate, id) {
-     return this.getResourse(
+  RateMovie = (rate, id) => this.getResourse(
       `${this.baseUrl}/movie/${id}/rating?${this.apiKey}&guest_session_id=${localStorage.getItem('guest_session_id')}`,
       {
         method: 'POST',
@@ -27,8 +26,7 @@ export default class Services {
         },
       }
     );
-  }
-
+  
   getResourseRated = () => this.getResourse(
       `${this.baseUrl}/guest_session/${localStorage.getItem('guest_session_id')}/rated/movies?${this.apiKey}`
     );

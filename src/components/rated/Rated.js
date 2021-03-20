@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './rated.css';
 import PropTypes from 'prop-types';
-import { Row, Spin, Alert } from 'antd';
-import Service from '../../Service';
-import CardMovie from '../CardMovie/CardMovie'
+import { Row,  Alert } from 'antd';
+import Service from '../../service';
+import CardMovie from '../cardMovie/CardMovie';
+import SpinLoading from '../error/SpinLoading';
 
 const Rated = ({ active, setActive }) => {
 
@@ -37,19 +38,10 @@ const Rated = ({ active, setActive }) => {
     <Alert message="Ошибка" description="Неполадки с интернетом" type="попробуйте перезагрузить страничку" showIcon />
   );
 
-  function spinLoading() {
-    return (
-      <Spin tip="Loading..." size="large">
-        <Alert message="one secons please" description="Further details about the context of this alert." type="info" />
-      </Spin>
-    );
-  }
+  useEffect(() => setActive('search'));
 
 
-  useEffect(() => setActive(false));
-
-
-  if (loading) return spinLoading();
+  if (loading) return <SpinLoading/>;
   if (error) return <Alert type="error" message="ошибка в запросе и все" banner />;
 
   if (!navigator.onLine) return onErrorOffInternet();
@@ -67,11 +59,11 @@ const Rated = ({ active, setActive }) => {
 export default Rated;
 
 Rated.defaultProps = {
-  active: true,
+  active: '',
   setActive: () => {},
 };
 
 Rated.propTypes = {
-  active: PropTypes.bool,
+  active: PropTypes.string,
   setActive: PropTypes.func,
 };

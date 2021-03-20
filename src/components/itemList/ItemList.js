@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './itemList.css';
 import PropTypes from 'prop-types';
-import { Row, Spin, Alert, Pagination } from 'antd';
-import Service from '../../Service';
-import CardMovie from '../CardMovie/CardMovie';
+import { Row, Alert, Pagination } from 'antd';
+import Service from '../../service';
+import CardMovie from '../cardMovie/CardMovie';
+import SpinLoading from '../error/SpinLoading';
 
 const ItemList = ({ searchData }) => {
   const apiService = new Service();
@@ -41,15 +42,7 @@ const ItemList = ({ searchData }) => {
     <Alert message="Ошибка" description="Неполадки с интернетом" type="попробуйте перезагрузить страничку" showIcon />
   );
 
-  function spinLoading() {
-    return (
-      <Spin tip="Loading..." size="large">
-        <Alert message="one secons please" description="Further details about the context of this alert." type="info" />
-      </Spin>
-    );
-  }
-
-  if (loading) return spinLoading();
+  if (loading) return <SpinLoading/>;
   if (error) return <Alert type="error" message="ошибка в запросе и все" banner />;
 
   if (!navigator.onLine) return onErrorOffInternet();

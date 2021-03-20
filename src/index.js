@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
-import App from './compons/app/app';
+import App from './components/app/App';
 import GenresContext from './context/context';
 import './index.css';
-import Service from './Service';
+import Service from './service';
 
 function Index() {
 

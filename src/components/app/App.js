@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Row, Col, Tabs } from 'antd';
 import { debounce } from 'lodash';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
-import ItemList from '../itemList/itemList';
-import Search from '../Search/search';
-import Rated from '../Rated/Rated';
+import ItemList from '../itemList/ItemList';
+import Search from '../search/Search';
+import Rated from '../rated/Rated';
 
 const App = () => {
   const [searchData, setSearchData] = useState('man');
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState('search');
 
   const activeTab = (key) => {
-    if (key === 'Rated1') setActive(true);
+    if (key === 'Rated') setActive('Rated');
   };
 
   const searchText = (value) => {
@@ -37,7 +37,7 @@ const App = () => {
               <Search searchText={debouncFunc} />
               <ItemList searchData={searchData} />
             </TabPane>
-            <TabPane tab="Rated" key="Rated1">
+            <TabPane tab="Rated" key="Rated">
               <Rated setActive={setActive} active={active} />
             </TabPane>
           </Tabs>
