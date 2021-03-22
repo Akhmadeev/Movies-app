@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Row, Col, Tabs } from 'antd';
-import { debounce } from 'lodash';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import ItemList from '../itemList/ItemList';
 import Search from '../search/Search';
@@ -23,7 +22,17 @@ const App = () => {
   const lg = {span: 18}
 
   const { TabPane } = Tabs;
-  const debouncFunc = debounce(searchText, 800);
+
+  const debounce = (fn, debouncTime) => {
+    let timeout;
+    return function () {
+      const fnCall = () => {
+        fn.apply(this, arguments)
+      }
+      clearTimeout(timeout);
+      timeout = setTimeout(fnCall, debouncTime)
+    }
+  }
 
   return (
     <div>
@@ -37,7 +46,7 @@ const App = () => {
             className="tab_main"
           >
             <TabPane tab="Search" key="Search">
-              <Search searchText={debouncFunc} />
+              <Search searchText={debounc(searchText, 800)} />
               <ItemList searchData={searchData} />
             </TabPane>
             <TabPane tab="Rated" key="Rated">
