@@ -19,13 +19,16 @@ const App = () => {
     setSearchData(text);
   };
 
+  const md = { span: 22 };
+  const lg = {span: 18}
+
   const { TabPane } = Tabs;
   const debouncFunc = debounce(searchText, 800);
 
   return (
     <div>
       <Row justify="center">
-        <Col md={{ span: 22 }} lg={{ span: 18 }}>
+        <Col md={md} lg={lg}>
           <Tabs
             defaultActiveKey="1"
             centered
