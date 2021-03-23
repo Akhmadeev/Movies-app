@@ -21,3 +21,15 @@ export const shortText = (longText, maxLength) => {
   const pos = longText.indexOf(' ', maxLength);
   return pos === -1 ? longText : longText.substr(0, pos) + dots;
 };
+
+ export const debounce = (fn, debouncTime) => {
+   let timeout;
+   const args = []
+    return function () {
+      const fnCall = () => {
+        fn.apply(this, ...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(fnCall, debouncTime);
+    };
+  };

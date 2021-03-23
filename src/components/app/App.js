@@ -4,6 +4,7 @@ import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import ItemList from '../itemList/ItemList';
 import Search from '../search/Search';
 import Rated from '../rated/Rated';
+import { debounce } from '../../utils';
 
 const App = () => {
   const [searchData, setSearchData] = useState('man');
@@ -23,17 +24,6 @@ const App = () => {
 
   const { TabPane } = Tabs;
 
-  const debounce = (fn, debouncTime) => {
-    let timeout;
-    return function () {
-      const fnCall = () => {
-        fn.apply(this, arguments)
-      }
-      clearTimeout(timeout);
-      timeout = setTimeout(fnCall, debouncTime)
-    }
-  }
-
   return (
     <div>
       <Row justify="center">
@@ -46,7 +36,7 @@ const App = () => {
             className="tab_main"
           >
             <TabPane tab="Search" key="Search">
-              <Search searchText={debounc(searchText, 800)} />
+              <Search searchText={debounce(searchText, 800)} />
               <ItemList searchData={searchData} />
             </TabPane>
             <TabPane tab="Rated" key="Rated">
