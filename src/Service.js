@@ -1,23 +1,24 @@
 export default class Services {
+
   baseUrl = 'https://api.themoviedb.org/3';
 
   apiKey = 'api_key=869cb700bbfae56825fae5c59c77dd18';
 
   getResourse = async (url, option) => {
-    const res = await fetch(url, option);
-    if (!res.ok) throw new Error(res.status);
+    const res = await fetch(`${this.baseUrl}${url}`, option);
+    if (!res.ok) throw new Error(res.status); 
     const body = await res.json();
     return body;
   }
   
-  getGenres = () => this.getResourse(`${this.baseUrl}/genre/movie/list?${this.apiKey}`);
+  getGenres = () => this.getResourse(`/genre/movie/list?${this.apiKey}`);
 
-  getResourseApi = (data, page) => this.getResourse(`${this.baseUrl}/search/movie?${this.apiKey}&query=${data}&page=${page}`);
+  getResourseApi = (data, page) => this.getResourse(`/search/movie?${this.apiKey}&query=${data}&page=${page}`);
 
-  getSessionGuest = () => this.getResourse(`${this.baseUrl}/authentication/guest_session/new?${this.apiKey}`);
+  getSessionGuest = () => this.getResourse(`/authentication/guest_session/new?${this.apiKey}`);
 
   RateMovie = (rate, id) => this.getResourse(
-      `${this.baseUrl}/movie/${id}/rating?${this.apiKey}&guest_session_id=${localStorage.getItem('guest_session_id')}`,
+      `/movie/${id}/rating?${this.apiKey}&guest_session_id=${localStorage.getItem('guest_session_id')}`,
       {
         method: 'POST',
         body: JSON.stringify({ value: rate }),
@@ -28,6 +29,6 @@ export default class Services {
     );
   
   getResourseRated = () => this.getResourse(
-      `${this.baseUrl}/guest_session/${localStorage.getItem('guest_session_id')}/rated/movies?${this.apiKey}`
+      `/guest_session/${localStorage.getItem('guest_session_id')}/rated/movies?${this.apiKey}`
     );
 }
