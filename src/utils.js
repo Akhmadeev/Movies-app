@@ -5,7 +5,7 @@ export const colorVoteAverage = (average) => {
   return 'voteAverageMax voteAverage';
 };
 
-export function arrayGenres(arr, id) {
+export const arrayGenres = (arr, id) => {
    const newArray = [];
    for (let j = 0; j < 2; j++) {
      for (let i = 0; i < arr.length; i++) {
@@ -25,7 +25,7 @@ export const shortText = (longText, maxLength) => {
  export const debounce = (fn, debouncTime) => {
    let timeout;
    const args = []
-    return function () {
+    return function callback () {
       const fnCall = () => {
         fn.apply(this, ...args);
       };
